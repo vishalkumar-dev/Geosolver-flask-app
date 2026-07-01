@@ -1,0 +1,163 @@
+HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+<title>GeoSolver Pro</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    display:flex;
+    justify-content:center;
+    padding-top:40px;
+}
+
+.box{
+    background: rgba(255,255,255,0.08);
+    padding:30px;
+    border-radius:20px;
+    width:500px;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+
+h1{
+    text-align:center;
+}
+
+input{
+    width:95%;
+    padding:12px;
+    margin:6px 0;
+    border:none;
+    border-radius:10px;
+    font-size:15px;
+    background:#f1f5f9;
+}
+
+.button-group{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+
+.button-group button{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#00bfff;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+.button-group button:hover{
+    transform:scale(1.05);
+    background:#0099cc;
+}
+
+.result{
+    margin-top:20px;
+    background:#111827;
+    padding:15px;
+    border-radius:15px;
+    animation: slideup 0.7s ease;
+}
+@keyframes slideUp{
+    from{
+         opacity:0;
+         transform:translateY(40px);
+    }
+    to{
+       opacity:1;
+       transform:translateY(0);
+    }
+}
+
+.error{
+    margin-top:15px;
+    background:#7f1d1d;
+    padding:10px;
+    border-radius:10px;
+}
+
+.formula{
+    color:#94a3b8;
+    font-size:14px;
+}
+</style>
+
+</head>
+
+<body>
+<div class="box">
+
+<h1>GeoSolver Pro</h1>
+
+<form method="POST">
+    <input name="x1" placeholder="Enter x1">
+    <input name="y1" placeholder="Enter y1">
+    <input name="x2" placeholder="Enter x2">
+    <input name="y2" placeholder="Enter y2">
+
+    <div class="button-group">
+        <button name="action" value="distance">Distance</button>
+        <button name="action" value="midpoint">Midpoint</button>
+        <button name="action" value="slope">Slope</button>
+        <button name="action" value="all">All</button>
+    </div>
+</form>
+<br><br>
+<a href="/download">
+<button type="button">Export PDF</button>
+</a>
+{% if error %}
+<div class="error">
+    {{error}}
+</div>
+{% endif %}
+
+{% if d %}
+<div class="result">
+    <h3>Distance = {{d}}</h3>
+    <div class="formula">
+        Formula: √((x2-x1)² + (y2-y1)²)
+    </div>
+</div>
+{% endif %}
+
+{% if m %}
+<div class="result">
+    <h3>Midpoint = {{m}}</h3>
+    <div class="formula">
+        Formula: ((x1+x2)/2 , (y1+y2)/2)
+    </div>
+</div>
+{% endif %}
+
+{% if s %}
+<div class="result">
+    <h3>Slope = {{s}}</h3>
+    <div class="formula">
+        Formula: (y2-y1)/(x2-x1)
+    </div>
+</div>
+{% endif %}
+{% if graph_html %}
+<div class="result">
+   {{ graph_html|safe}}
+</div>
+{% endif %}
+
+{% if history %}
+<div class="result">
+   <h3>Recent History</h3>
+   {% for item in history %}
+      <p>{{item}}</p>
+   {% endfor %}
+</div>
+{% endif %}
+</body>
+</html>
+"""
